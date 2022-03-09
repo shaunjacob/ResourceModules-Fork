@@ -18,14 +18,19 @@
             "value": "eastus"
         },
         "dbLogin": {
-            "value": "john"
+            "reference": {
+                "keyVault": {
+                    "id": "/subscriptions/7ce5fff6-aaaa-4a71-88b4-12b48eecfb1f/resourceGroups/rg-scenario-a/providers/Microsoft.KeyVault/vaults/kv-aks-d2ztzjy25qznc"
+                },
+                "secretName": "adminUsername"
+            }
         },
         "dbPassword": {
             "reference": {
                 "keyVault": {
                     "id": "/subscriptions/7ce5fff6-aaaa-4a71-88b4-12b48eecfb1f/resourceGroups/rg-scenario-a/providers/Microsoft.KeyVault/vaults/kv-aks-d2ztzjy25qznc"
                 },
-                "secretName": "dbPassword"
+                "secretName": "adminPassword"
             }
         }
     }
