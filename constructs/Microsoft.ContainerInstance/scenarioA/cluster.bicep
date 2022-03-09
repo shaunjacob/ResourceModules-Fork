@@ -115,7 +115,7 @@ module cluster '../../../arm/Microsoft.ContainerService/managedClusters/deploy.b
         osType: 'Linux'
         minCount: 3
         maxCount: 4
-        vnetSubnetID: vnet::snetClusterNodes.id
+        // vnetSubnetID: vnet::snetClusterNodes.id
         enableAutoScaling: true
         type: 'VirtualMachineScaleSets'
         mode: 'System'
@@ -147,7 +147,7 @@ module cluster '../../../arm/Microsoft.ContainerService/managedClusters/deploy.b
         osType: 'Linux'
         minCount: 2
         maxCount: 5
-        vnetSubnetID: vnet::snetClusterNodes.id
+        // vnetSubnetID: vnet::snetClusterNodes.id
         enableAutoScaling: true
         type: 'VirtualMachineScaleSets'
         mode: 'User'
@@ -179,7 +179,7 @@ module cluster '../../../arm/Microsoft.ContainerService/managedClusters/deploy.b
     nodeResourceGroup: nodeResourceGroupName
     aksClusterNetworkPlugin: 'azure'
     aksClusterNetworkPolicy: 'azure'
-    aksClusterOutboundType: 'userDefinedRouting'
+    aksClusterOutboundType: 'loadBalancer'
     aksClusterLoadBalancerSku: 'standard'
     aksClusterServiceCidr: '172.16.0.0/16'
     aksClusterDnsServiceIP: '172.16.0.10'
