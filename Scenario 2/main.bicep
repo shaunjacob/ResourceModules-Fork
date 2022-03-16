@@ -22,11 +22,29 @@ module vnet '../arm/Microsoft.Network/virtualNetworks/deploy.bicep' = {
       {
         name: 'aks-subnet'
         addressPrefix: '172.16.0.0/24'
+        privateEndpointNetworkPolicies: 'Disabled'
       }
       {
         name: 'vm-subnet'
         addressPrefix: '172.16.1.0/24'
         privateEndpointNetworkPolicies: 'Disabled'
+      }
+      {
+        name: 'pe-subnet'
+        addressPrefix: '172.16.2.0/24'
+        privateEndpointNetworkPolicies: 'Disabled'
+      }
+      {
+        name: 'appgw-subnet'
+        addressPrefix: '172.16.3.0/24'
+      }
+      {
+        name: 'jumpbox-subnet'
+        addressPrefix: '172.16.4.0/24'
+      }
+      {
+        name: 'AzureBastionSubnet'
+        addressPrefix: '172.16.5.0/24'
       }
     ]
   }
@@ -94,6 +112,7 @@ module aks '../arm/Microsoft.ContainerService/managedClusters/deploy.bicep' = {
   params: {
     name: 'group3aks'
     systemAssignedIdentity: true
+    enablePrivateCluster: true
     primaryAgentPoolProfile: [
       {
         name: 'akspoolname'
@@ -124,5 +143,51 @@ module containerRegistry '../arm/Microsoft.ContainerRegistry/registries/deploy.b
     name: 'scenario2cr'
     acrAdminUserEnabled: true
     acrSku: 'Basic'
+  }
+}
+
+module vm '../arm/Microsoft.Compute/virtualMachines/deploy.bicep' = {
+  name: 'vm-deploy'
+  scope: resourceGroup(rgname)
+  params: {
+    name: 'scenario2-vm'
+    imageReference: {
+      publisher: 'MicrosoftWindowsServer'
+      offer: 'WindowsServer'
+      sku: '2016-Datacenter'
+      version: 'latest'
+    }
+    osType: 'Windows'
+    osDisk: {
+      createOption: 'fromImage'
+      deleteOption: 'Delete'
+      diskSizeGB: 128
+      managedDisk: {
+        storageAccountType: 'Premium_LRS'
+      }
+    }
+    vmSize: 'standard_d4ads_v5'
+    adminUsername: 'localAdminUser'
+    adminPassword: 'Azure1234!@#$' //Placeholder only! Team should deploy KV first, the add secret, and then Deploy VM/SQL
+    nicConfigurations: [
+      {
+        nicSuffix: '-nic-01'
+        ipConfigurations: [
+          {
+            name: 'ipconfig01'
+            subnetId: vnet.outputs.subnetResourceIds[4]
+          }
+        ]
+      }
+    ]
+  }
+}
+
+module bastion '../arm/Microsoft.Network/bastionHosts/deploy.bicep' = {
+  scope: resourceGroup(rgname)
+  name: 'bastion-deploy'
+  params: {
+    name: 'scenario2-bastion'
+    vNetId: vnet.outputs.resourceId
   }
 }
