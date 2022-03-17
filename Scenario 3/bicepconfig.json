@@ -1,0 +1,20 @@
+{
+    "analyzers": {
+        "core": {
+            "rules": {
+                "explicit-values-for-loc-params": {
+                    "level": "warning"
+                }
+            }
+        }
+    },
+    "moduleAliases": {
+        "ts": {},
+        "br": {
+            "modules": {
+                "registry": "t3sdlfdsfkl.azurecr.io",
+                "modulePath": "bicep/modules"
+            }
+        }
+    }
+}
